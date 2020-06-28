@@ -1,0 +1,132 @@
+            
+
+// 1) function that gives the number of nodes in the tree
+
+FUNCTION number_of_nodes(root^:TBO) :INTEGER
+BEGIN
+    IF (root= NULL) THEN
+        RETURN 0;
+    ELSE
+        IF (root^.VAL<> NULL) THEN
+        RETURN 1+number_of_nodes(root^.LC)+number_of_nodes(root^.RC);
+        END_IF
+    END_IF
+END
+
+//  2) function that gives the height of a tree
+
+FUNCTION height_of_a_tree(root^:TBO) : INTEGER
+
+BEGIN
+    IF (root= NULL) THEN
+        RETURN 0;
+    ELSE
+    left_side:INTEGER;
+    right_side:INTEGER;
+        left_side = height_of_a_tree(root^.LC);
+        right_side = height_of_a_tree(root^.RC);
+        IF (left_side > right_side) THEN
+            RETURN left_side + 1;  
+            ELSE
+            RETURN right_side + 1;
+        END_IF
+        
+    END_IF
+END
+
+//  3) function that gives the number of leaves in the tree
+
+FUNCTION number_of_leaves(root^:TBO) : INTEGER
+BEGIN
+    IF (root= NULL) THEN
+        RETURN 0;
+    ELSE
+        IF (root^.VAL <> NULL ) THEN
+            IF (root^.LC= NULL and root^.RC=NULL) THEN
+                RETURN count++;
+            ELSE
+                IF (root^.LC<> NULL) THEN
+                    number_of_leaves(root^.LC);
+                END_IF
+                IF (root^.RC<> NULL) THEN
+                    number_of_leaves(root^.RC);
+                END_IF
+            END_IF
+        END_IF
+    END_IF
+END
+
+ //  4) function that gives the maximum value in the tree Tree_basic_operations   
+            
+FUNCTION maximum_Tree_basic_operations(root:^TBO,max:INTEGER) :INTEGER
+BEGIN
+    IF (root= NULL) THEN
+        RETURN Write("Tree is empty");
+    ELSE 
+        IF (root^.VAL> max) THEN
+            max:=root^.VAL;
+        END_IF
+        IF (root^.LC<> NULL) THEN
+            maximum_Tree_basic_operations(root^.LC,max);
+        END_IF
+        IF (root^.RC<>NULL) THEN
+            maximum_Tree_basic_operations(root^.RC,max);
+        END_IF
+        RETURN max;
+    END_IF
+END
+
+// 5) function to test if the tree is a full binary tree
+
+FUNCTION tree_is_a_full_binary(root^:TBO) :BOOLEAN
+BEGIN
+    IF (root= NULL) THEN
+        RETURN TRUE;
+    END_IF
+
+    IF ((root^.LC=NULL) and (root^.RC=NULL)) THEN
+        RETURN TRUE;
+    END_IF
+    IF ((root^.LC<>NULL) and (root^.RC<>NULL)) THEN
+        RETURN ( tree_is_a_full_binary(root^.LC)  and   tree_is_a_full_binary(root^.RC))
+    END_IF
+    RETURN FALSE 
+END
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+ALGORITHM Tree_basic_operations
+VAR
+
+    TBO :STRUCT
+                            VAL : INTEGER;
+                             LC : ^TBO; // a pointer to left child
+                             RC : ^TBO; // a pointer to right child
+                        END_STRUCT
+    root^:TBO;
+    
+    n_nodes,h_height,n_leaves:INTEGER;
+    // max est le plus petit nombre entier
+    max:INTEGER:=INTEGER.VAL_MIN;
+    test_binary:BOOLEAN;
+    left_side:INTEGER:=0;
+    right_side:INTEGER:=0;
+    count:INTEGER:=0;
+
+
+BEGIN
+    n_nodes:= number_of_nodes(root^:TBO);
+    Write("the number of nodes in the tree ="+n_nodes);
+    h_height:=height_of_a_tree(root^:TBO);
+    Write("the height of a tree="+h_height);
+    n_leaves:=number_of_leaves(root^:TBO);
+    Write("the number of leaves in the tree ="+ n_leaves);
+    max:=maximum_Tree_basic_operations(root^:TBO,max:INTEGER);
+    Write("the maximum value in the tree Tree_basic_operations ="+max);
+    test_binary:= tree_is_a_full_binary(root^:TBO);
+    Write("the tree is a full binary tree :"+ test_binary);
+
+END
